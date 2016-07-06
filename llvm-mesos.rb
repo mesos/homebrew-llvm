@@ -23,7 +23,7 @@ class LlvmMesos < Formula
 
   # version suffix
   def ver
-    "mesos-3.8"
+    "mesos"
   end
 
   # LLVM installs its own standard library which confuses stdlib checking.
