@@ -48,6 +48,8 @@ class LlvmMesos < Formula
       -DLLVM_BUILD_LLVM_DYLIB=On
     ]
 
+    args  << "-DCMAKE_INSTALL_PREFIX=#{install_prefix}"
+
     if build.universal?
       ENV.permit_arch_flags
       args << "-DCMAKE_OSX_ARCHITECTURES=#{Hardware::CPU.universal_archs.as_cmake_arch_flags}"
@@ -55,16 +57,8 @@ class LlvmMesos < Formula
 
     mktemp do
       system "cmake", "-G", "Unix Makefiles", buildpath, *(std_cmake_args + args)
-      system "cmake --build . --target clang-format"
-      system "cmake --build . --target clang-tidy"
-      (install_prefix/"bin").install "bin/clang-format"
-      (install_prefix/"bin").install "bin/clang-tidy"
+      system "cmake --build . --target install"
     end
-
-    (install_prefix/"bin").install "tools/clang/tools/clang-format/git-clang-format"
-    (install_prefix/"share/clang").install Dir["tools/clang/tools/clang-format/clang-format*"]
-    (install_prefix/"share/clang").install "tools/clang/tools/extra/clang-tidy/tool/clang-tidy-diff.py"
-    (install_prefix/"share/clang").install "tools/clang/tools/extra/clang-tidy/tool/run-clang-tidy.py"
 
     Dir.glob(install_prefix/"bin/*") do |exec_path|
       basename = File.basename(exec_path)
