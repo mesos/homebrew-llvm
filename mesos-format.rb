@@ -3,6 +3,8 @@ class MesosFormat < Formula
   homepage "https://github.com/mesos/clang"
 
   stable do
+    version "2017-11-11"
+
     url "https://releases.llvm.org/5.0.0/llvm-5.0.0.src.tar.xz"
     sha256 "e35dcbae6084adcf4abb32514127c5eabd7d63b733852ccdb31e06f1373136da"
 
@@ -13,13 +15,13 @@ class MesosFormat < Formula
 
   keg_only :provided_by_osx
 
-  depends_on "cmake" => :build
-
   fails_with :gcc_4_0
   fails_with :gcc
   ("4.3".."4.6").each do |n|
     fails_with :gcc => n
   end
+
+  depends_on "cmake" => :build
 
   def install
     # Apple's libstdc++ is too old to build LLVM

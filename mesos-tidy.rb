@@ -3,6 +3,8 @@ class MesosTidy < Formula
   homepage "https://github.com/mesos/clang-tools-extra"
 
   stable do
+    version "2017-11-11"
+
     url "https://releases.llvm.org/5.0.0/llvm-5.0.0.src.tar.xz"
     sha256 "e35dcbae6084adcf4abb32514127c5eabd7d63b733852ccdb31e06f1373136da"
 
@@ -17,22 +19,20 @@ class MesosTidy < Formula
 
   keg_only :provided_by_osx
 
-  depends_on "cmake" => :build
-
   fails_with :gcc_4_0
   fails_with :gcc
   ("4.3".."4.6").each do |n|
     fails_with :gcc => n
   end
 
+  depends_on "cmake" => :build
+
   def install
     # Apple's libstdc++ is too old to build LLVM
     ENV.libcxx if ENV.compiler == :clang
 
-    extra = "tools/clang/tools/extra"
-
     (buildpath/"tools/clang").install resource("clang")
-    (buildpath/extra).install resource("clang-tools-extra")
+    (buildpath/"tools/clang/tools/extra").install resource("clang-tools-extra")
 
     args = %w[
       -DLLVM_OPTIMIZED_TABLEGEN=ON
@@ -41,8 +41,8 @@ class MesosTidy < Formula
 
     mktemp do
       system "cmake", "-G", "Unix Makefiles", buildpath, *(std_cmake_args + args)
-      system "cmake", "--build", extra/"clang-apply-replacements", "--target", "install"
-      system "cmake", "--build", extra/"clang-tidy", "--target", "install"
+      system "cmake", "--build", "tools/clang/tools/extra/clang-apply-replacements", "--target", "install"
+      system "cmake", "--build", "tools/clang/tools/extra/clang-tidy", "--target", "install"
     end
   end
 end
