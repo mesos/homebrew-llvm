@@ -33,7 +33,7 @@ matrix:
       compiler: gcc
       os: linux
       dist: trusty
-    # Ubuntu 14.04, mesos-format
+    # Ubuntu 14.04, mesos-tidy
     - env: TOOL=mesos-tidy
       compiler: gcc
       os: linux
