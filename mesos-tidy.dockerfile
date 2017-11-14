@@ -28,6 +28,6 @@ ENTRYPOINT \
           -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_INSTALL_PREFIX=/"${TOOL}/${VERSION}" \
           -DLLVM_BUILD_STATIC=ON /tmp/llvm && \
-    cmake --build tools/clang/tools/extra/clang-apply-replacements --target install  && \
-    cmake --build tools/clang/tools/extra/clang-tidy --target install && \
+    ninja tools/clang/tools/extra/clang-tidy/install && \
+    ninja tools/clang/tools/extra/clang-apply-replacements/install && \
     tar cf /install/"${TOOL}-${VERSION}".linux.tar.gz /"${TOOL}"
