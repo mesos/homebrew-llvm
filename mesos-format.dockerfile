@@ -4,7 +4,7 @@ MAINTAINER The Apache Mesos Developers <dev@mesos.apache.org>
 WORKDIR /tmp/build
 
 RUN yum install -y centos-release-scl && \
-    yum install -y devtoolset-4-gcc-c++ git glibc-static python27 unzip
+    yum install -y devtoolset-4-gcc-c++ git glibc-static python27 unzip wget
 
 RUN wget https://cmake.org/files/v3.8/cmake-3.8.2-Linux-x86_64.sh && \
     bash cmake-3.8.2-Linux-x86_64.sh --skip-license --prefix=/usr/local
