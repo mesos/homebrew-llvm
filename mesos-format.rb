@@ -22,6 +22,7 @@ class MesosFormat < Formula
   end
 
   depends_on "cmake" => :build
+  depends_on "ninja" => :build
 
   def install
     # Apple's libstdc++ is too old to build LLVM
@@ -35,7 +36,7 @@ class MesosFormat < Formula
     ]
 
     mktemp do
-      system "cmake", "-G", "Unix Makefiles", buildpath, *(std_cmake_args + args)
+      system "cmake", "-G", "Ninja", buildpath, *(std_cmake_args + args)
       system "cmake", "--build", ".", "--target", "clang-format"
       system "cmake", "-DCOMPONENT=clang-format", "-P", "cmake_install.cmake"
     end

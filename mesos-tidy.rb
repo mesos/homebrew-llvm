@@ -26,6 +26,7 @@ class MesosTidy < Formula
   end
 
   depends_on "cmake" => :build
+  depends_on "ninja" => :build
 
   def install
     # Apple's libstdc++ is too old to build LLVM
@@ -40,9 +41,9 @@ class MesosTidy < Formula
     ]
 
     mktemp do
-      system "cmake", "-G", "Unix Makefiles", buildpath, *(std_cmake_args + args)
-      system "cmake", "--build", "tools/clang/tools/extra/clang-apply-replacements", "--target", "install"
-      system "cmake", "--build", "tools/clang/tools/extra/clang-tidy", "--target", "install"
+      system "cmake", "-G", "Ninja", buildpath, *(std_cmake_args + args)
+      system "ninja", "tools/clang/tools/extra/clang-apply-replacements/install"
+      system "ninja", "tools/clang/tools/extra/clang-tidy/install"
     end
   end
 end
