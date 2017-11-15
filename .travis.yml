@@ -1,8 +1,4 @@
 language: cpp
-sudo: required
-
-services:
-  - docker
 
 git:
   depth: 1
@@ -29,28 +25,16 @@ matrix:
       compiler: clang
       os: osx
       osx_image: xcode8.3
-    # Ubuntu 14.04, mesos-format
-    - env: TOOL=mesos-format
-      compiler: gcc
-      os: linux
-      dist: trusty
-    # Ubuntu 14.04, mesos-tidy
-    - env: TOOL=mesos-tidy
-      compiler: gcc
-      os: linux
-      dist: trusty
+
+install:
+  - brew update
+  - brew tap mesos/llvm
+  - brew install --verbose --build-bottle "${TOOL}"
 
 script:
-  - |
-    if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
-      brew update
-      brew tap mesos/llvm
-      brew install --verbose --build-bottle "${TOOL}"
-      brew bottle "${TOOL}"
-    elif [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-      docker build -t "${TOOL}" --file "${TOOL}".dockerfile .
-      docker run --rm -v "$(pwd)":/install:Z "${TOOL}"
-    fi
+  - brew bottle "${TOOL}"
+
+after_success:
   - ls -R
 
 notifications:
