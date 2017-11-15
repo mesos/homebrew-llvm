@@ -1,0 +1,37 @@
+branches:
+  only:
+    - master
+
+clone_depth: 1
+
+image: Visual Studio 2017
+platform: x64
+
+install:
+  - mkdir /tmp/install
+  - mkdir /tmp/llvm
+  - curl http://llvm.org/releases/5.0.0/llvm-5.0.0.src.tar.xz | tar --strip-components=1 -xJ -C /tmp/llvm
+  - git clone --depth 1 -b mesos_50 https://github.com/mesos/clang.git /tmp/llvm/tools/clang
+  - git clone --depth 1 -b mesos_50 https://github.com/mesos/clang-tools-extra.git /tmp/llvm/tools/clang/tools/extra
+  - mkdir /tmp/build && cd /tmp/build
+  - cmake -G "Visual Studio 15 2017 Win64" \
+      -DCMAKE_C_FLAGS_RELEASE=-DNDEBUG \
+      -DCMAKE_CXX_FLAGS_RELEASE=-DNDEBUG \
+      -DCMAKE_INSTALL_PREFIX=/tmp/install \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_FIND_FRAMEWORK=LAST \
+      -Wno-dev \
+      -DLLVM_OPTIMIZED_TABLEGEN=ON /tmp/llvm
+  - cmake --build . --target clang-format --config Release
+  - cmake -DDCOMPONENT=clang-format -P cmake_install.cmake
+  - cmake --build tools/clang/tools/extra/clang-apply-replacements --target install
+  - cmake --build tools/clang/tools/extra/clang-tidy --target install
+
+build:
+  verbosity: normal
+
+build_script:
+  - dir /tmp/install
+
+after_build:
+  - dir /tmp/install
