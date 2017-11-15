@@ -1,6 +1,6 @@
-class MesosTidy < Formula
-  desc "ClangTidy for Mesos"
-  homepage "https://github.com/mesos/clang-tools-extra"
+class MesosLlvm < Formula
+  desc "Mesos LLVM tools"
+  homepage "http://mesos.apache.org"
 
   stable do
     version "2017-11-11"
@@ -42,6 +42,8 @@ class MesosTidy < Formula
 
     mktemp do
       system "cmake", "-G", "Ninja", buildpath, *(std_cmake_args + args)
+      system "cmake", "--build", ".", "--target", "clang-format"
+      system "cmake", "-DCOMPONENT=clang-format", "-P", "cmake_install.cmake"
       system "ninja", "tools/clang/tools/extra/clang-apply-replacements/install"
       system "ninja", "tools/clang/tools/extra/clang-tidy/install"
     end

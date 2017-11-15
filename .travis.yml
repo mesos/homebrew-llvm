@@ -5,34 +5,22 @@ git:
 
 matrix:
   include:
-    # OS X El Capitan 10.11, mesos-format
-    - env: TOOL=mesos-format
-      compiler: clang
+    # OS X El Capitan 10.11
+    - compiler: clang
       os: osx
       osx_image: xcode7.3
-    # OS X El Capitan 10.11, mesos-tidy
-    - env: TOOL=mesos-tidy
-      compiler: clang
-      os: osx
-      osx_image: xcode7.3
-    # OS X Sierra 10.12, mesos-format
-    - env: TOOL=mesos-format
-      compiler: clang
-      os: osx
-      osx_image: xcode8.3
-    # OS X Sierra 10.12, mesos-tidy
-    - env: TOOL=mesos-tidy
-      compiler: clang
+    # OS X Sierra 10.12
+    - compiler: clang
       os: osx
       osx_image: xcode8.3
 
 install:
   - brew update
   - brew tap mesos/llvm
-  - brew install --verbose --build-bottle "${TOOL}"
+  - brew install --verbose --build-bottle mesos-llvm
 
 script:
-  - brew bottle "${TOOL}"
+  - brew bottle mesos-llvm
 
 after_success:
   - ls -R
